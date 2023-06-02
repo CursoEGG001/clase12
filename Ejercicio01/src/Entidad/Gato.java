@@ -16,4 +16,9 @@ public class Gato extends Animal {
         super(nombre, tipoAlimento, cantidadAlimento);
         this.raza = raza;
     }
+    
+        @Override
+    public void Alimentar() {
+        System.out.println("El perro se alimenta con " + this.tipoAlimento);
+    }
 }

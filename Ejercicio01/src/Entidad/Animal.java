@@ -52,4 +52,8 @@ public class Animal {
         Alimentar servicioAlimentar = new Alimentar();
         servicioAlimentar.alimentarAnimal(this);
     }
+    
+    public void Alimentar(){
+        System.out.println("Este animal se alimenta");
+    }
 }
