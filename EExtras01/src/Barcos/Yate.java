@@ -28,7 +28,7 @@ public class Yate extends BarcoMotor {
 
     @Override
     public String toString() {
-        return "Yate{" + "numCamarotes=" + numCamarotes + '}';
+        return "Yate{" + "numCamarotes=" + numCamarotes +", potenciaMotor="+ super.getPotenciaMotor()+ '}';
     }
 
 }

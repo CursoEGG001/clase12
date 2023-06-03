@@ -20,10 +20,10 @@ public class ServicioAlquiler {
         //Inicio de un nuevo alquiler
         Alquiler nuevo = new Alquiler();
 
-        Bote chiquito = new Bote("AssaN22002", 12, 2010);
+        Bote chiquito = new Bote("AssaN22002", 13, 2010);
         Velero imponente = new Velero(2, "Amma3453", 7, 2012);
-        BarcoMotor generoso = new BarcoMotor(7000, "MSMT223", 9, 2000);
-        Yate enorme = new Yate(3, 20000, "LOM7689", 15, 2015);
+        BarcoMotor generoso = new BarcoMotor(23, "MSMT223", 11, 2000);
+        Yate enorme = new Yate(3, 47, "LOM7689", 17, 2015);
 
         Scanner opc = new Scanner(System.in, "UTF-8").useDelimiter("\n");
         
