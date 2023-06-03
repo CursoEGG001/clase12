@@ -4,6 +4,7 @@
  */
 package clase12;
 
+import Entidad.Alumno;
 import Entidad.Animal;
 import Entidad.Gato;
 import Entidad.Perro;
@@ -30,18 +31,25 @@ public class TeoriaEjercicios {
         losAnimalitos.add(a);
         losAnimalitos.add(b);
         losAnimalitos.add(c);
-        
+
         for (Animal losAnimalito : losAnimalitos) {
             losAnimalito.hacerRuido();
         }
-        
+
         System.out.println("---------------------------------------");
-        
+
         UnaClase deLaInterfaz = new UnaClase();
-        
+
         deLaInterfaz.unMetodo();
-        System.out.println("Y además... " + deLaInterfaz.unaSuma()+ " que no sé que es");
+        System.out.println("Y además... " + deLaInterfaz.unaSuma() + " que no sé que es");
+
+        Alumno nuevito = new Alumno();
+        if (!nuevito.getClass().getSuperclass().toGenericString().toLowerCase().contains("persona")) {
+            System.out.println(nuevito.getClass().getSuperclass().toGenericString());
+        } else {
+            nuevito.codear();
+        }
+
     }
-    
 
 }
