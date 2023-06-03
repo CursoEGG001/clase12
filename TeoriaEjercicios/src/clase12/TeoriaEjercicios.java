@@ -7,6 +7,7 @@ package clase12;
 import Entidad.Animal;
 import Entidad.Gato;
 import Entidad.Perro;
+import Entidad.estaClase;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,10 @@ public class TeoriaEjercicios {
         for (Animal losAnimalito : losAnimalitos) {
             losAnimalito.hacerRuido();
         }
+        
+        estaClase haceCosas = new estaClase();
+        
+        haceCosas.suMetodo();
     }
 
 }
