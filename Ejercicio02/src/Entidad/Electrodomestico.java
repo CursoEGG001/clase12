@@ -99,7 +99,7 @@ public class Electrodomestico {
         String colorAparato = leer.next();
         comprobarColor(colorAparato);
         
-        System.out.println("Ingrese el consumo energético del electrodoméstico "+ this.getClass().getSimpleName()+ ": ");
+        System.out.println("Ingrese el consumo energético (letra A hasta F) del electrodoméstico "+ this.getClass().getSimpleName()+ ": ");
         char letra = leer.next().toUpperCase().charAt(0);
         comprobarConsumoEnergetico(letra);
         
