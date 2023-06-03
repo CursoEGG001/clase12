@@ -16,7 +16,7 @@ public class Gato extends Animal {
 
     @Override
     public void hacerRuido() {
-        super.hacerRuido();
+//        super.hacerRuido();
         System.out.println("Bueno! MIAU!");// Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
     

@@ -16,7 +16,7 @@ public class Perro extends Animal {
 
     @Override
     public void hacerRuido() {
-        super.hacerRuido();
+//        super.hacerRuido();
         System.out.println("Bueno! GUAU!");// Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
     
