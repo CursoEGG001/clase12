@@ -83,7 +83,7 @@ public class Alquiler {
             esteCalculo += ((BarcoMotor) elBarco).getPotenciaMotor();
         }
         if (elBarco instanceof Yate) {
-            esteCalculo += ((Yate) elBarco).getNumCamarotes();
+            esteCalculo += ((Yate) elBarco).getNumCamarotes()+((Yate) elBarco).getPotenciaMotor();
         }
 
         esteCalculo *= (int) finAlquiler.toEpochDay() - inicioAlquiler.toEpochDay();
