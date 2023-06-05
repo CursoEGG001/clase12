@@ -5,14 +5,6 @@
 package clase12;
 
 import Servicio.HospedajeServicio;
-import Entidad.Alojamiento;
-import Entidad.Camping;
-import Entidad.Hotel;
-import Entidad.Hotel4Estrellas;
-import Entidad.Hotel5Estrellas;
-import Entidad.Residencia;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  *
