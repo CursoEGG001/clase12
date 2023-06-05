@@ -7,7 +7,11 @@ package clase12;
 import Entidad.Animal;
 import Entidad.Gato;
 import Entidad.Perro;
+
 import Entidad.estaClase;
+
+import Entidad.UnaClase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +39,19 @@ public class TeoriaEjercicios {
             losAnimalito.hacerRuido();
         }
         
+
         estaClase haceCosas = new estaClase();
         
         haceCosas.suMetodo();
+
+        System.out.println("---------------------------------------");
+        
+        UnaClase deLaInterfaz = new UnaClase();
+        
+        deLaInterfaz.unMetodo();
+        System.out.println("Y además... " + deLaInterfaz.unaSuma()+ " que no sé que es");
+
     }
+    
 
 }
