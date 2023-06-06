@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="AlquilaBarcos">
+  <ClassDiagramComponents>
+    <Class name="Bote" package="" visibility="public" xPosition="58.0" yPosition="40.0">
+      <Fields>
+        <Field name="matricula" type="String" visibility="private"/>
+        <Field name="eslora" type="double" visibility="private"/>
+        <Field name="AnioFabricacion" type="int" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="ponPrecioAlquiler" returnType="double" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Velero" package="" visibility="public" xPosition="266.0" yPosition="97.0">
+      <Fields>
+        <Field name="numMastiles" type="int" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="BarcoMotor" package="" visibility="public" xPosition="58.0" yPosition="238.0">
+      <Fields>
+        <Field name="potenciaMotor" type="double" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Yate" package="" visibility="public" xPosition="266.0" yPosition="238.0">
+      <Fields>
+        <Field name="numCamarotes" type="int" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ServicioAlquiler" package="" visibility="public" xPosition="487.0" yPosition="388.0">
+      <Fields>
+        <Field name="diasOcupa" type="int" visibility="private"/>
+        <Field name="ModuloAmarre" type="double" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Alquiler" package="" visibility="public" xPosition="487.0" yPosition="40.0">
+      <Fields>
+        <Field name="nomCliente" type="String" visibility="private"/>
+        <Field name="dniCliente" type="int" visibility="private"/>
+        <Field name="inicioAlquiler" type="LocalDate" visibility="private"/>
+        <Field name="finAlquiler" type="LocalDate" visibility="private"/>
+        <Field name="posAmarre" type="int" visibility="private"/>
+        <Field name="elBarco" type="Bote" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="PrecioFinal" returnType="double" visibility="public"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <IsRelation name="es un" source="BarcoMotor" target="Bote"/>
+    <HasRelation name="requiere" source="Alquiler" target="ServicioAlquiler" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <UseRelation name="usa un" source="Bote" target="Alquiler" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <IsRelation name="es un" source="Velero" target="Bote"/>
+    <HasRelation name="puede" source="Bote" target="Alquiler" type="Aggregation" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <IsRelation name="es un" source="Yate" target="BarcoMotor"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
