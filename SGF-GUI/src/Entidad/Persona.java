@@ -5,7 +5,16 @@
 package Entidad;
 
 /**
- *
+  * Sistema Gestión Facultad. Se pretende realizar una aplicación para una facultad que gestione la información sobre las
+ * personas vinculadas con la misma y que se pueden clasificar en tres tipos: estudiantes, profesores y personal de servicio.
+ * A continuación, se detalla qué tipo de información debe gestionar esta aplicación:
+ * 
+ * • Por cada persona, se debe conocer, al menos, su nombre y apellidos, su número de identificación y su estado civil. 
+ * • Con respecto a los empleados, sean del tipo que sean, hay que saber su año de incorporación a la facultad y qué número
+ *   de despacho tienen asignado.
+ *  * 
+ * Incluya un programa de prueba que instancie objetos de los distintos tipos y pruebe los métodos desarrollados.
+ **
  * @author pc
  */
 public class Persona {
