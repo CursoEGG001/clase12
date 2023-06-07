@@ -66,8 +66,11 @@ public class SGFTableView extends Application {
         barritas.setContent(ajusteVentana);
 
         // Crea columnas para la vista de tabla
+        // TableColumn<Objeto, Cadena>
         TableColumn<Persona, String> nameColumn = new TableColumn<>("Nombre");
-//        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nombreProperty());
+        
+        //new PropertyValueFactory<>(  .-cadena de la propiedad del objeto en general-.  )
+//        nameColumn.setCellValueFactory(dato -> dato.getValue().getNombreProperty());
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         TableColumn<Persona, String> lastNameColumn = new TableColumn<>("Apellido");
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
@@ -76,7 +79,7 @@ public class SGFTableView extends Application {
         TableColumn<Persona, String> estadoCivilColumn = new TableColumn<>("Estado Civil");
         estadoCivilColumn.setCellValueFactory(new PropertyValueFactory<>("estadoCivil"));
 
-        // Add the columns to the table view
+        // Suma las columnas a la vista de tabla.
         table.getColumns().addAll(nameColumn, lastNameColumn, dniColumn, estadoCivilColumn);
 
         // Pone algo de datos en la vista de tabla
