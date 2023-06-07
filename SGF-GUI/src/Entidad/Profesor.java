@@ -32,7 +32,7 @@ public class Profesor extends Empleado {
 
     @Override
     public String toString() {
-        return "Profesor: " + "\n\t Departamento: " + departamento;
+        return super.toString()+"\n\tProfesor: " + "\n\t Departamento: " + departamento;
     }
 
     @Override

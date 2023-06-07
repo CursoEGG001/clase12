@@ -26,7 +26,7 @@ public class Empleado extends Persona {
 
     @Override
     public String toString() {
-        return "Empleado: " + "\n\tAño Incorporación: " + yearIncorporacion
+        return super.toString()+"\n\tEmpleado: " + "\n\tAño Incorporación: " + yearIncorporacion
                 + "\n Número de despacho: " + numeroDespacho;
     }
 

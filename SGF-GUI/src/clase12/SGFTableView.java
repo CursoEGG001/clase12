@@ -14,6 +14,8 @@ import static javafx.application.Application.launch;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -109,13 +111,13 @@ public class SGFTableView extends Application {
             }
         }
 
-        // Create a button to add a new row to the TableView
+        // Crear el botón para agregar una fila nueva en la vista de Tabla
         Button botonCarga = new Button("Add");
-        botonCarga.setOnAction(event -> {
-            // Create a new Persona object with the values entered in the TextFields
+        botonCarga.setOnAction((ActionEvent event) -> {
+            // Crea un nuevo objeto Persona con los campos de texto.
             Persona persona = new Persona(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText());
-
-            // Add the new Persona object to the TableView
+            
+            // Suma el nuevo objeto Persona a la vista de Tabla.
             table.getItems().add(persona);
         });
 
@@ -134,14 +136,17 @@ public class SGFTableView extends Application {
 
         label.setFont(new Font("Consolas", 18));
 
-        // Crea un VBox para compaginar la vista de las etiquetas y la vista de tabla.
+        // Crea un par VBox para compaginar la vista de las etiquetas y la vista de tabla.
         VBox vbox = new VBox();
         VBox textBoxes = new VBox();
         HBox laCaja = new HBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(label, table, info2);
-        textBoxes.getChildren().addAll(new Label("nombre"),att1TextField,new Label("apellido"), att2TextField,new Label("DNI"), att3TextField,new Label("Estado Civil"), att4TextField, botonCarga);
+        textBoxes.getChildren().addAll(new Label("Nombre:"),att1TextField,new Label("Apellido:"), att2TextField,new Label("DNI :"), att3TextField,new Label("Estado Civil:"), att4TextField, botonCarga);
+        textBoxes.setPadding(new Insets(19, 4, 4, 10));
+        
+        // Agregación al contenedor principal de la ventana.
         ajusteVentana.autosize();
         laCaja.getChildren().add(vbox);
         laCaja.getChildren().add(textBoxes);

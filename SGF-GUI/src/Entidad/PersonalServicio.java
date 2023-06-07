@@ -32,7 +32,7 @@ public class PersonalServicio extends Empleado {
 
     @Override
     public String toString() {
-        return "PersonalServicio: " + "\n\t Sección: " + seccion;
+        return super.toString()+"\n\tPersonalServicio: " + "\n\t Sección: " + seccion;
     }
 
     @Override
