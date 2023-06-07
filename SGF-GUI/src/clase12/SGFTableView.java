@@ -16,12 +16,15 @@ import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -31,24 +34,20 @@ import javafx.stage.Stage;
  * Sistema Gestión Facultad. Se pretende realizar una aplicación para una facultad que gestione la información sobre las
  * personas vinculadas con la misma y que se pueden clasificar en tres tipos: estudiantes, profesores y personal de servicio.
  * A continuación, se detalla qué tipo de información debe gestionar esta aplicación:
- * 
- * • Por cada persona, se debe conocer, al menos, su nombre y apellidos, su número de identificación y su estado civil. 
- * • Con respecto a los empleados, sean del tipo que sean, hay que saber su año de incorporación a la facultad y qué número
- *   de despacho tienen asignado.
- * • En cuanto a los estudiantes, se requiere almacenar el curso en el que están matriculados. 
- * • Por lo que se refiere a los profesores, es necesario gestionar a qué departamento pertenecen (lenguajes, matemáticas, arquitectura, ...). 
- * • Sobre el personal de servicio, hay que conocer a qué sección están asignados (biblioteca, decanato, secretaría, ...).
- * 
+ *
+ * • Por cada persona, se debe conocer, al menos, su nombre y apellidos, su número de identificación y su estado civil. • Con
+ * respecto a los empleados, sean del tipo que sean, hay que saber su año de incorporación a la facultad y qué número de
+ * despacho tienen asignado. • En cuanto a los estudiantes, se requiere almacenar el curso en el que están matriculados. •
+ * Por lo que se refiere a los profesores, es necesario gestionar a qué departamento pertenecen (lenguajes, matemáticas,
+ * arquitectura, ...). • Sobre el personal de servicio, hay que conocer a qué sección están asignados (biblioteca, decanato,
+ * secretaría, ...).
+ *
  * El ejercicio consiste, en primer lugar, en definir la jerarquía de clases de esta aplicación. A continuación, debe
  * programar las clases definidas en las que, además de los constructores, hay que desarrollar los métodos correspondientes a
- * las siguientes operaciones: 
- * • Cambio del estado civil de una persona. 
- * • Reasignación de despacho a un empleado.
- * • Matriculación de un estudiante en un nuevo curso.
- * • Cambio de departamento de un profesor.
- * • Traslado de sección de un empleado del personal de servicio.
- * • Imprimir toda la información de cada tipo de individuo.
- * 
+ * las siguientes operaciones: • Cambio del estado civil de una persona. • Reasignación de despacho a un empleado. •
+ * Matriculación de un estudiante en un nuevo curso. • Cambio de departamento de un profesor. • Traslado de sección de un
+ * empleado del personal de servicio. • Imprimir toda la información de cada tipo de individuo.
+ *
  * Incluya un programa de prueba que instancie objetos de los distintos tipos y pruebe los métodos desarrollados.
  *
  * @author pc
@@ -61,6 +60,12 @@ public class SGFTableView extends Application {
         AnchorPane ajusteVentana = new AnchorPane();
         ScrollPane barritas = new ScrollPane();
 
+        // Create TextFields for the corresponding attributes
+        TextField att1TextField = new TextField();
+        TextField att2TextField = new TextField();
+        TextField att3TextField = new TextField();
+        TextField att4TextField = new TextField();
+
         // Crea una vista de tabla
         TableView<Persona> table = new TableView<>();
         barritas.setContent(ajusteVentana);
@@ -68,7 +73,7 @@ public class SGFTableView extends Application {
         // Crea columnas para la vista de tabla
         // TableColumn<Objeto, Cadena>
         TableColumn<Persona, String> nameColumn = new TableColumn<>("Nombre");
-        
+
         //new PropertyValueFactory<>(  .-cadena de la propiedad del objeto en general-.  )
 //        nameColumn.setCellValueFactory(dato -> dato.getValue().getNombreProperty());
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -104,6 +109,16 @@ public class SGFTableView extends Application {
             }
         }
 
+        // Create a button to add a new row to the TableView
+        Button botonCarga = new Button("Add");
+        botonCarga.setOnAction(event -> {
+            // Create a new Persona object with the values entered in the TextFields
+            Persona persona = new Persona(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText());
+
+            // Add the new Persona object to the TableView
+            table.getItems().add(persona);
+        });
+
         Label label = new Label(paraTitulo);
         Label info2 = new Label("Etiquetas contenido elegido...");
 
@@ -121,11 +136,16 @@ public class SGFTableView extends Application {
 
         // Crea un VBox para compaginar la vista de las etiquetas y la vista de tabla.
         VBox vbox = new VBox();
+        VBox textBoxes = new VBox();
+        HBox laCaja = new HBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(label, table, info2);
+        textBoxes.getChildren().addAll(new Label("nombre"),att1TextField,new Label("apellido"), att2TextField,new Label("DNI"), att3TextField,new Label("Estado Civil"), att4TextField, botonCarga);
         ajusteVentana.autosize();
-        ajusteVentana.getChildren().add(vbox);
+        laCaja.getChildren().add(vbox);
+        laCaja.getChildren().add(textBoxes);
+        ajusteVentana.getChildren().add(laCaja);
         AnchorPane.setTopAnchor(table, 25.0);
         AnchorPane.setBottomAnchor(table, 35.0);
         AnchorPane.setRightAnchor(table, 20.0);
