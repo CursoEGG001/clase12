@@ -112,7 +112,7 @@ public class SGFTableView extends Application {
         }
 
         // Crear el botón para agregar una fila nueva en la vista de Tabla
-        Button botonCarga = new Button("Add");
+        Button botonCarga = new Button("Agregar Persona");
         botonCarga.setOnAction((ActionEvent event) -> {
             // Crea un nuevo objeto Persona con los campos de texto.
             Persona persona = new Persona(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText());
@@ -126,13 +126,10 @@ public class SGFTableView extends Application {
 
         ObservableList<Persona> elElegido = table.getSelectionModel().getSelectedItems();
 
-        elElegido.addListener(new ListChangeListener<Persona>() {
-            @Override
-            public void onChanged(Change<? extends Persona> cambio) {
-                info2.setText(cambio.getList().toString());
-
-            } //        elElegido.addListener(
-        });
+        elElegido.addListener((Change<? extends Persona> cambio) -> {
+            info2.setText(cambio.getList().toString());
+        } //        elElegido.addListener(
+        );
 
         label.setFont(new Font("Consolas", 18));
 
