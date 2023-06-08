@@ -8,8 +8,11 @@ import Entidad.Empleado;
 import Entidad.Estudiante;
 import Entidad.Persona;
 import Entidad.Profesor;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 import javafx.application.Application;
-
+import java.util.stream.Collectors;
 import static javafx.application.Application.launch;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
@@ -116,7 +119,7 @@ public class SGFTableView extends Application {
         botonCarga.setOnAction((ActionEvent event) -> {
             // Crea un nuevo objeto Persona con los campos de texto.
             Persona persona = new Persona(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText());
-            
+
             // Suma el nuevo objeto Persona a la vista de Tabla.
             table.getItems().add(persona);
         });
@@ -126,10 +129,36 @@ public class SGFTableView extends Application {
 
         ObservableList<Persona> elElegido = table.getSelectionModel().getSelectedItems();
 
-        elElegido.addListener((Change<? extends Persona> cambio) -> {
-            info2.setText(cambio.getList().toString());
-        } //        elElegido.addListener(
-        );
+        elElegido.addListener(new ListChangeListener<Persona>() {
+            @Override
+            public void onChanged(Change<? extends Persona> cambio) {
+                info2.setText(cambio.getList().toString());
+
+                /*
+                Inicio punto aparte
+                
+                En el proceso de obtener un par de campos de la clase del objeto se usó un Array Stream para:
+                -Obtener el objeto
+                -Obtener la clase
+                -conseguir los campos de attributos y/o propiedades
+                
+                Luego se realiza la obtención de las cadenas que los representan internamente:
+                 - Obtiene el elemento
+                 - Se extrae el nombre
+                
+                Por ultimo se crea una List<String> conteniendo las propiedades.
+                 */
+                List<String> propiedades = Arrays.stream(cambio.getList().get(0).getClass().getDeclaredFields())
+                        .map(campos -> campos.getName())
+                        .collect(Collectors.toList());
+
+                for (String propiedade : propiedades) {
+                    System.out.println(propiedade);
+                }
+
+                //Fin punto aparte
+            } //        elElegido.addListener(
+        });
 
         label.setFont(new Font("Consolas", 18));
 
@@ -140,9 +169,9 @@ public class SGFTableView extends Application {
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(label, table, info2);
-        textBoxes.getChildren().addAll(new Label("Nombre:"),att1TextField,new Label("Apellido:"), att2TextField,new Label("DNI :"), att3TextField,new Label("Estado Civil:"), att4TextField, botonCarga);
+        textBoxes.getChildren().addAll(new Label("Nombre:"), att1TextField, new Label("Apellido:"), att2TextField, new Label("DNI :"), att3TextField, new Label("Estado Civil:"), att4TextField, botonCarga);
         textBoxes.setPadding(new Insets(19, 4, 4, 10));
-        
+
         // Agregación al contenedor principal de la ventana.
         ajusteVentana.autosize();
         laCaja.getChildren().add(vbox);
