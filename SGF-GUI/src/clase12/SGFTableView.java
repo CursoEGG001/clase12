@@ -9,6 +9,7 @@ import Entidad.Estudiante;
 import Entidad.Persona;
 import Entidad.Profesor;
 import java.lang.reflect.Modifier;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import javafx.application.Application;
@@ -80,7 +81,7 @@ public class SGFTableView extends Application {
         TableColumn<Persona, String> nameColumn = new TableColumn<>("Nombre");
 
         //new PropertyValueFactory<>(  .-cadena de la propiedad del objeto en general-.  )
-//        nameColumn.setCellValueFactory(dato -> dato.getValue().getNombreProperty());
+//        nameColumn.setCellValueFactory(dato -> (dato.getValue().getNombre()));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         TableColumn<Persona, String> lastNameColumn = new TableColumn<>("Apellido");
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
@@ -151,7 +152,13 @@ public class SGFTableView extends Application {
                 List<String> propiedades = Arrays.stream(cambio.getList().get(0).getClass().getDeclaredFields())
                         .map(campos -> campos.getName())
                         .collect(Collectors.toList());
+                List<String> propiedadesPadre = Arrays.stream(cambio.getList().get(0).getClass().getSuperclass().getDeclaredFields())
+                        .map(campos -> campos.getName())
+                        .collect(Collectors.toList());
 
+                for (String atributo : propiedadesPadre) {
+                    System.out.println(atributo);
+                }
                 for (String propiedade : propiedades) {
                     System.out.println(propiedade);
                 }
