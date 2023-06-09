@@ -20,6 +20,12 @@ public class PersonalServicio extends Empleado {
 
     protected String seccion;
 
+    public PersonalServicio(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil, int yearIncorporacion, int numeroDespacho) {
+        super(nombre, apellidos, numeroIdentificacion, estadoCivil, yearIncorporacion, numeroDespacho);
+    }
+    
+    
+
     public PersonalServicio(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil,
             int yearIncorporacion, int numeroDespacho, String seccion) {
         super(nombre, apellidos, numeroIdentificacion, estadoCivil, yearIncorporacion, numeroDespacho);

@@ -13,6 +13,12 @@ public class Empleado extends Persona {
     protected int yearIncorporacion;
     protected int numeroDespacho;
 
+    public Empleado(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil) {
+        super(nombre, apellidos, numeroIdentificacion, estadoCivil);
+    }
+    
+    
+
     public Empleado(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil,
             int yearIncorporacion, int numeroDespacho) {
         super(nombre, apellidos, numeroIdentificacion, estadoCivil);

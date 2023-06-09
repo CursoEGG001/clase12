@@ -23,6 +23,12 @@ public class Estudiante extends Persona {
 
     protected String curso;
 
+    public Estudiante(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil) {
+        super(nombre, apellidos, numeroIdentificacion, estadoCivil);
+    }
+    
+    
+
     public Estudiante(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil, String curso) {
         super(nombre, apellidos, numeroIdentificacion, estadoCivil);
         this.curso = curso;

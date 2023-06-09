@@ -20,6 +20,12 @@ public class Profesor extends Empleado {
 
     protected String departamento;
 
+    public Profesor(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil, int yearIncorporacion, int numeroDespacho) {
+        super(nombre, apellidos, numeroIdentificacion, estadoCivil, yearIncorporacion, numeroDespacho);
+    }
+    
+    
+
     public Profesor(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil,
             int yearIncorporacion, int numeroDespacho, String departamento) {
         super(nombre, apellidos, numeroIdentificacion, estadoCivil, yearIncorporacion, numeroDespacho);

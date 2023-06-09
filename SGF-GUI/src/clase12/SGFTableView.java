@@ -7,22 +7,22 @@ package clase12;
 import Entidad.Empleado;
 import Entidad.Estudiante;
 import Entidad.Persona;
+import Entidad.PersonalServicio;
 import Entidad.Profesor;
-import java.lang.reflect.Modifier;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import javafx.application.Application;
 import java.util.stream.Collectors;
 import static javafx.application.Application.launch;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -35,6 +35,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  * Sistema Gestión Facultad. Se pretende realizar una aplicación para una facultad que gestione la información sobre las
@@ -65,6 +66,7 @@ public class SGFTableView extends Application {
 
         AnchorPane ajusteVentana = new AnchorPane();
         ScrollPane barritas = new ScrollPane();
+        ComboBox attObjeto = new ComboBox<>();
 
         // Create TextFields for the corresponding attributes
         TextField att1TextField = new TextField();
@@ -100,7 +102,36 @@ public class SGFTableView extends Application {
                 new Empleado("Menier", "Suarez", "45698745", "Soltero", 2020, 10),
                 new Profesor("Bartolo", "Monje", "25159753", "Soltero", 2010, 17, "Programación")
         );
+        
+        
+        //Crea una caja de selección para los objetos heredados (Usa objetos nuevos para obtener los atributos y propiedades)
+        attObjeto.setItems(FXCollections.observableArrayList(
+                new Empleado("", "", "", "", 0, 0),
+                new Estudiante("", "", "", "", ""),
+                new PersonalServicio("", "", "", "", 0, 0),
+                new Profesor("", "", "", "", 0, 0),
+                new Persona("","","","")
+        ));
+        attObjeto.setConverter(new StringConverter<Persona>() {
 
+            @Override
+            public String toString(Persona object) {
+                return object.getClass().getSimpleName();
+            }
+
+            @Override
+            public Persona fromString(String string) {
+                return null;
+            }
+        });
+
+        attObjeto.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null) {
+                System.out.println("Selected: " + newValue.getClass().getName() + ", ID: " + newValue.hashCode());
+            }
+        });
+        
+        
         // Crea unas etiquetas
         String paraTitulo = "";
         for (Persona item : table.getItems()) {
@@ -176,7 +207,7 @@ public class SGFTableView extends Application {
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(label, table, info2);
-        textBoxes.getChildren().addAll(new Label("Nombre:"), att1TextField, new Label("Apellido:"), att2TextField, new Label("DNI :"), att3TextField, new Label("Estado Civil:"), att4TextField, botonCarga);
+        textBoxes.getChildren().addAll(new Label("Seleccione Persona:"),attObjeto,new Label("Nombre:"), att1TextField, new Label("Apellido:"), att2TextField, new Label("DNI :"), att3TextField, new Label("Estado Civil:"), att4TextField, botonCarga);
         textBoxes.setPadding(new Insets(19, 4, 4, 10));
 
         // Agregación al contenedor principal de la ventana.

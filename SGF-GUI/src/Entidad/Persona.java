@@ -24,6 +24,11 @@ public class Persona {
     protected String numeroIdentificacion;
     protected String estadoCivil;
 
+    public Persona() {
+    }
+    
+    
+
     public Persona(String nombre, String apellidos, String numeroIdentificacion, String estadoCivil) {
         this.nombre = nombre;
         this.apellidos = apellidos;
