@@ -127,7 +127,11 @@ public class SGFTableView extends Application {
 
         attObjeto.valueProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue != null) {
-                System.out.println("Selected: " + newValue.getClass().getName() + ", ID: " + newValue.hashCode());
+                System.out.println("Selected: " + newValue.getClass().getName() + ","
+                        + " Campos Declarados: " + newValue.getClass().getDeclaredFields().length
+                + ", Nombres atributos:" + Arrays.stream(newValue.getClass().getDeclaredFields())
+                        .map(campos -> campos.getName())
+                        .collect(Collectors.toList()));
             }
         });
         
