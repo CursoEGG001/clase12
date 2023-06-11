@@ -9,11 +9,14 @@ import Entidad.Estudiante;
 import Entidad.Persona;
 import Entidad.PersonalServicio;
 import Entidad.Profesor;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import javafx.application.Application;
 import java.util.stream.Collectors;
 import static javafx.application.Application.launch;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
@@ -28,9 +31,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -68,7 +73,14 @@ public class SGFTableView extends Application {
         ScrollPane barritas = new ScrollPane();
         ComboBox attObjeto = new ComboBox<>();
 
-        // Create TextFields for the corresponding attributes
+        // Crea un par VBox para compaginar la vista de las etiquetas y la vista de tabla.
+        VBox vbox = new VBox();
+        VBox textBoxes = new VBox();
+        HBox laCaja = new HBox();
+
+        VBox ventanaAjuste = new VBox();
+
+        // Crea TextFields para los atributos correspondientes
         TextField att1TextField = new TextField();
         TextField att2TextField = new TextField();
         TextField att3TextField = new TextField();
@@ -102,40 +114,7 @@ public class SGFTableView extends Application {
                 new Empleado("Menier", "Suarez", "45698745", "Soltero", 2020, 10),
                 new Profesor("Bartolo", "Monje", "25159753", "Soltero", 2010, 17, "Programación")
         );
-        
-        
-        //Crea una caja de selección para los objetos heredados (Usa objetos nuevos para obtener los atributos y propiedades)
-        attObjeto.setItems(FXCollections.observableArrayList(
-                new Empleado("", "", "", "", 0, 0),
-                new Estudiante("", "", "", "", ""),
-                new PersonalServicio("", "", "", "", 0, 0),
-                new Profesor("", "", "", "", 0, 0),
-                new Persona("","","","")
-        ));
-        attObjeto.setConverter(new StringConverter<Persona>() {
 
-            @Override
-            public String toString(Persona object) {
-                return object.getClass().getSimpleName();
-            }
-
-            @Override
-            public Persona fromString(String string) {
-                return null;
-            }
-        });
-
-        attObjeto.valueProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue != null) {
-                System.out.println("Selected: " + newValue.getClass().getName() + ","
-                        + " Campos Declarados: " + newValue.getClass().getDeclaredFields().length
-                + ", Nombres atributos:" + Arrays.stream(newValue.getClass().getDeclaredFields())
-                        .map(campos -> campos.getName())
-                        .collect(Collectors.toList()));
-            }
-        });
-        
-        
         // Crea unas etiquetas
         String paraTitulo = "";
         for (Persona item : table.getItems()) {
@@ -202,16 +181,69 @@ public class SGFTableView extends Application {
             } //        elElegido.addListener(
         });
 
+        //Crea una caja de selección para los objetos heredados (Usa objetos nuevos para obtener los atributos y propiedades)
+        attObjeto.setItems(FXCollections.observableArrayList(
+                new Empleado("", "", "", "", 0, 0),
+                new Estudiante("", "", "", "", ""),
+                new PersonalServicio("", "", "", "", 0, 0),
+                new Profesor("", "", "", "", 0, 0),
+                new Persona("", "", "", "")
+        ));
+        attObjeto.setConverter(new StringConverter<Persona>() {
+
+            @Override
+            public String toString(Persona object) {
+                return object.getClass().getSimpleName();
+            }
+
+            @Override
+            public Persona fromString(String string) {
+                return null;
+            }
+        });
+
+        attObjeto.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue obs, Object oldValue, Object newValue) {
+                if (newValue != null) {
+                    System.out.println("Selected: " + newValue.getClass().getName() + ","
+                            + " Campos Declarados: " + newValue.getClass().getDeclaredFields().length
+                            + ", Nombres atributos:" + Arrays.stream(newValue.getClass().getDeclaredFields())
+                                    .map(campos -> campos.getName())
+                                    .collect(Collectors.toList()));
+                    System.out.println("Obs: " + obs.getValue().getClass().getSimpleName());
+                    //Basado en el objeto elegido en la caja de selección se agrega nuevo contenido
+
+                }
+            }
+        });
+
+        //Basado en el objeto elegido en la caja de selección se agrega nuevo contenido
+        attObjeto.setPromptText("No se ha elegido nada.");
+
+        attObjeto.setOnAction(evento -> {
+
+            ventanaAjuste.getChildren().removeIf(nodo -> nodo instanceof Pane);
+            if (!attObjeto.getSelectionModel().getSelectedItem().getClass().getSimpleName().equals("Persona")) {
+                for (Field declaredField : attObjeto.getSelectionModel().getSelectedItem().getClass().getDeclaredFields()) {
+                    Pane estaSeleccion = new Pane();
+                    estaSeleccion.setPadding(new Insets(3));
+                    TextField elCampo = new TextField(declaredField.getName() + " va aquí");
+                    elCampo.setTooltip(new Tooltip("Tiene " + declaredField.getName()));
+                    estaSeleccion.getChildren().add(elCampo);
+                    ventanaAjuste.getChildren().add(estaSeleccion);
+                }
+            }
+
+            textBoxes.getChildren().add(ventanaAjuste);
+        });
+
         label.setFont(new Font("Consolas", 18));
 
-        // Crea un par VBox para compaginar la vista de las etiquetas y la vista de tabla.
-        VBox vbox = new VBox();
-        VBox textBoxes = new VBox();
-        HBox laCaja = new HBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(label, table, info2);
-        textBoxes.getChildren().addAll(new Label("Seleccione Persona:"),attObjeto,new Label("Nombre:"), att1TextField, new Label("Apellido:"), att2TextField, new Label("DNI :"), att3TextField, new Label("Estado Civil:"), att4TextField, botonCarga);
+        textBoxes.getChildren().addAll(new Label("Seleccione Persona:"), attObjeto, new Label("Nombre:"), att1TextField, new Label("Apellido:"), att2TextField, new Label("DNI :"), att3TextField, new Label("Estado Civil:"), att4TextField, botonCarga);
         textBoxes.setPadding(new Insets(19, 4, 4, 10));
 
         // Agregación al contenedor principal de la ventana.
