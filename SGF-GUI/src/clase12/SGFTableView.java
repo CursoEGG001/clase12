@@ -38,10 +38,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -206,8 +212,6 @@ public class SGFTableView extends Application {
                                     .map(campos -> campos.getName())
                                     .collect(Collectors.toList()));
                     System.out.println("Obs: " + obs.getValue().getClass().getSimpleName());
-                    //Basado en el objeto elegido en la caja de selección se agrega nuevo contenido
-
                 }
             }
         });
@@ -220,6 +224,9 @@ public class SGFTableView extends Application {
             public void handle(Event evento) {
                 ventanaAjuste.getChildren().removeIf(nodo -> nodo instanceof Pane);
                 if (!attObjeto.getSelectionModel().getSelectedItem().getClass().getSimpleName().equals("Persona")) {
+                    
+                    // Explicando que solo se necesitan los campos usados por el Objeto
+                    // se realíza la selección de los campos que estos aportan para generarlo.
                     paraCampos.clear();
                     for (Field item : attObjeto.getSelectionModel().getSelectedItem().getClass().getDeclaredFields()) {
                         for (Field declaredField : attObjeto.getSelectionModel().getSelectedItem().getClass().getSuperclass().getDeclaredFields()) {
@@ -232,11 +239,15 @@ public class SGFTableView extends Application {
 
                     for (Map.Entry<String, String> fieldDeclaration : paraCampos.entrySet()) {
                         Pane estaSeleccion = new Pane();
-                        estaSeleccion.setPadding(new Insets(3));
+                        estaSeleccion.setTranslateY(12);
                         TextField elCampo = new TextField(fieldDeclaration.getKey() + " va aquí");
                         elCampo.setTooltip(new Tooltip("Tiene " + fieldDeclaration.getKey()));
+                        elCampo.setPadding(new Insets(7));
+                        elCampo.setLayoutX(3);
+                        elCampo.setLayoutY(2);
                         elCampo.setId(fieldDeclaration.getKey());
 
+                        // Los atendedores se ubican para almacenar el contenido a inicializar por el objeto de Persona correspondiente
                         elCampo.textProperty().addListener(new ChangeListener<String>() {
                             @Override
                             public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
@@ -274,6 +285,7 @@ public class SGFTableView extends Application {
                     case 0:
                         Empleado empleado = new Empleado(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), Integer.parseInt(paraCampos.get("yearIncorporacion").trim()), Integer.parseInt(paraCampos.get("numeroDespacho").trim()));
 
+                        // --Monitor de valores--
                         //for (Map.Entry<String, String> conjunto : paraCampos.entrySet()) {
                         //
                         //    System.out.println("Es " + conjunto.getKey() + " y tiene " + conjunto.getValue());
@@ -310,7 +322,11 @@ public class SGFTableView extends Application {
         });
 
         label.setFont(new Font("Consolas", 18));
-
+        botonCarga.setFont(new Font("Segoe UI", 14));
+        botonCarga.setBorder(new Border(new BorderStroke(Color.MEDIUMBLUE,BorderStrokeStyle.DASHED,new CornerRadii(2.8),new BorderWidths(2.08))));
+        botonCarga.setTextFill(Color.ORANGERED);
+        
+        
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(label, table, info2);
