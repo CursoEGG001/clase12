@@ -9,19 +9,29 @@ import Entidad.Estudiante;
 import Entidad.Persona;
 import Entidad.PersonalServicio;
 import Entidad.Profesor;
+import java.awt.RenderingHints;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javafx.application.Application;
 import java.util.stream.Collectors;
 import static javafx.application.Application.launch;
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,6 +43,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -72,6 +83,7 @@ public class SGFTableView extends Application {
         AnchorPane ajusteVentana = new AnchorPane();
         ScrollPane barritas = new ScrollPane();
         ComboBox attObjeto = new ComboBox<>();
+        HashMap<String, String> paraCampos = new HashMap<String, String>();
 
         // Crea un par VBox para compaginar la vista de las etiquetas y la vista de tabla.
         VBox vbox = new VBox();
@@ -88,7 +100,6 @@ public class SGFTableView extends Application {
 
         // Crea una vista de tabla
         TableView<Persona> table = new TableView<>();
-        barritas.setContent(ajusteVentana);
 
         // Crea columnas para la vista de tabla
         // TableColumn<Objeto, Cadena>
@@ -128,16 +139,6 @@ public class SGFTableView extends Application {
                 paraTitulo = paraTitulo + ((paraTitulo.isEmpty()) ? "" : ", ") + item.getClass().getSimpleName();
             }
         }
-
-        // Crear el botón para agregar una fila nueva en la vista de Tabla
-        Button botonCarga = new Button("Agregar Persona");
-        botonCarga.setOnAction((ActionEvent event) -> {
-            // Crea un nuevo objeto Persona con los campos de texto.
-            Persona persona = new Persona(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText());
-
-            // Suma el nuevo objeto Persona a la vista de Tabla.
-            table.getItems().add(persona);
-        });
 
         Label label = new Label(paraTitulo);
         Label info2 = new Label("Etiquetas contenido elegido...");
@@ -221,21 +222,77 @@ public class SGFTableView extends Application {
         //Basado en el objeto elegido en la caja de selección se agrega nuevo contenido
         attObjeto.setPromptText("No se ha elegido nada.");
 
-        attObjeto.setOnAction(evento -> {
+        attObjeto.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event evento) {
+                ventanaAjuste.getChildren().removeIf(nodo -> nodo instanceof Pane);
+                if (!attObjeto.getSelectionModel().getSelectedItem().getClass().getSimpleName().equals("Persona")) {
+                    for (Field declaredField : attObjeto.getSelectionModel().getSelectedItem().getClass().getDeclaredFields()) {
+                        Pane estaSeleccion = new Pane();
+                        estaSeleccion.setPadding(new Insets(3));
+                        TextField elCampo = new TextField(declaredField.getName() + " va aquí");
+                        elCampo.setTooltip(new Tooltip("Tiene " + declaredField.getName()));
+                        elCampo.setId(declaredField.getName());
+                        paraCampos.put(declaredField.getName(), "");
+                        elCampo.setOnKeyTyped((KeyEvent eventito) -> {
+                            paraCampos.replace(declaredField.getName(), elCampo.getText() + " ");
+                        });
+                        // paraCampos.put(declaredField.getName(), elCampo.getText());
+                        System.out.println("Tiene :" + elCampo.getId());
+                        estaSeleccion.getChildren().add(elCampo);
+                        ventanaAjuste.getChildren().add(estaSeleccion);
+                    }
 
-            ventanaAjuste.getChildren().removeIf(nodo -> nodo instanceof Pane);
-            if (!attObjeto.getSelectionModel().getSelectedItem().getClass().getSimpleName().equals("Persona")) {
-                for (Field declaredField : attObjeto.getSelectionModel().getSelectedItem().getClass().getDeclaredFields()) {
-                    Pane estaSeleccion = new Pane();
-                    estaSeleccion.setPadding(new Insets(3));
-                    TextField elCampo = new TextField(declaredField.getName() + " va aquí");
-                    elCampo.setTooltip(new Tooltip("Tiene " + declaredField.getName()));
-                    estaSeleccion.getChildren().add(elCampo);
-                    ventanaAjuste.getChildren().add(estaSeleccion);
+                }
+
+                if (!textBoxes.getChildren().contains(ventanaAjuste)) {
+                    textBoxes.getChildren().add(ventanaAjuste);
                 }
             }
+        });
 
-            textBoxes.getChildren().add(ventanaAjuste);
+        // Crear el botón para agregar una fila nueva en la vista de Tabla
+        Button botonCarga = new Button("Agregar Persona");
+        botonCarga.setOnAction((ActionEvent event) -> {
+            System.out.println("Activo : " + event);
+            if (attObjeto.getSelectionModel().getSelectedIndex() != 4) {
+                switch (attObjeto.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        Empleado empleado = new Empleado(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), Integer.parseInt(paraCampos.get("yearIncorporacion").trim()), Integer.parseInt(paraCampos.get("numeroDespacho").trim()));
+
+                        for (Map.Entry<String, String> conjunto : paraCampos.entrySet()) {
+
+                            System.out.println("Es " + conjunto.getKey() + " y tiene " + conjunto.getValue());
+
+                        }
+                        table.getItems().add(empleado);
+                        break;
+                    case 1:
+                        Estudiante estudiante = new Estudiante(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), "");
+                        table.getItems().add(estudiante);
+                        System.out.println("Es " + textBoxes.getChildren().filtered(node -> node instanceof TextField).size());
+
+                        break;
+                    case 2:
+                        PersonalServicio personalServicio = new PersonalServicio(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), 0, 0);
+                        System.out.println("Es " + textBoxes.getChildren().filtered(node -> node instanceof TextField).size());
+                        table.getItems().add(personalServicio);
+                        break;
+                    case 3:
+                        Profesor profesor = new Profesor(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), 0, 0);
+                        System.out.println("Es " + textBoxes.getChildren().filtered(node -> node instanceof TextField).size());
+                        table.getItems().add(profesor);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+            } else {
+                // Crea un nuevo objeto Persona con los campos de texto.
+                Persona persona = new Persona(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText());
+
+                // Suma el nuevo objeto Persona a la vista de Tabla.
+                table.getItems().add(persona);
+            }
         });
 
         label.setFont(new Font("Consolas", 18));
@@ -247,6 +304,7 @@ public class SGFTableView extends Application {
         textBoxes.setPadding(new Insets(19, 4, 4, 10));
 
         // Agregación al contenedor principal de la ventana.
+        barritas.setContent(ajusteVentana);
         ajusteVentana.autosize();
         laCaja.getChildren().add(vbox);
         laCaja.getChildren().add(textBoxes);
