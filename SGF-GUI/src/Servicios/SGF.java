@@ -42,7 +42,7 @@ public class SGF {
         profesor.reasignarDespacho(101);
         profesor.imprimirInformacion();
 
-        PersonalServicio personalServicio = new PersonalServicio("Pedro", "López", "456789123", "Soltero", 2010, 205, "Biblioteca");
+        PersonalServicio personalServicio = new PersonalServicio("Almacén","Pedro", "López", "456789123", "Soltero",2010,25);
         personalServicio.imprimirInformacion();
         
         personalServicio.cambiarSeccion("Aulas");

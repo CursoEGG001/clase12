@@ -37,7 +37,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -117,7 +116,8 @@ public class SGFTableView extends Application {
                 new Estudiante("Juan", "Perez", "123456789", "Soltero", "Lógica"),
                 new Estudiante("Maria", "Gonzalez", "987654321", "Casada", "Cálculos"),
                 new Empleado("Menier", "Suarez", "45698745", "Soltero", 2020, 10),
-                new Profesor("Bartolo", "Monje", "25159753", "Soltero", 2010, 17, "Programación")
+                new Profesor("Bartolo", "Monje", "25159753", "Soltero", 2010, 17, "Programación"),
+                new PersonalServicio("Almacén", "Andrés", "Martel", "9517534", "Casado", 2011, 25)
         );
 
         // Crea unas etiquetas
@@ -177,10 +177,9 @@ public class SGFTableView extends Application {
         });
 
         //Crea una caja de selección para los objetos heredados (Usa objetos nuevos para obtener los atributos y propiedades)
-        attObjeto.setItems(FXCollections.observableArrayList(
-                new Empleado("", "", "", "", 0, 0),
+        attObjeto.setItems(FXCollections.observableArrayList(new Empleado("", "", "", "", 0, 0),
                 new Estudiante("", "", "", "", ""),
-                new PersonalServicio("", "", "", "", 0, 0),
+                new PersonalServicio("", "", "", "", "", 0, 25),
                 new Profesor("", "", "", "", 0, 0),
                 new Persona("", "", "", "")
         ));
@@ -221,23 +220,34 @@ public class SGFTableView extends Application {
             public void handle(Event evento) {
                 ventanaAjuste.getChildren().removeIf(nodo -> nodo instanceof Pane);
                 if (!attObjeto.getSelectionModel().getSelectedItem().getClass().getSimpleName().equals("Persona")) {
-                    for (Field declaredField : attObjeto.getSelectionModel().getSelectedItem().getClass().getDeclaredFields()) {
+                    paraCampos.clear();
+                    for (Field item : attObjeto.getSelectionModel().getSelectedItem().getClass().getDeclaredFields()) {
+                        for (Field declaredField : attObjeto.getSelectionModel().getSelectedItem().getClass().getSuperclass().getDeclaredFields()) {
+                            paraCampos.put(item.getName(), "");
+                            if (attObjeto.getSelectionModel().getSelectedItem().getClass().getSuperclass().getSimpleName().equals("Empleado")) {
+                                paraCampos.put(declaredField.getName(), "");
+                            }
+                        }
+                    }
+
+                    for (Map.Entry<String, String> fieldDeclaration : paraCampos.entrySet()) {
                         Pane estaSeleccion = new Pane();
                         estaSeleccion.setPadding(new Insets(3));
-                        TextField elCampo = new TextField(declaredField.getName() + " va aquí");
-                        elCampo.setTooltip(new Tooltip("Tiene " + declaredField.getName()));
-                        elCampo.setId(declaredField.getName());
-                        paraCampos.put(declaredField.getName(), "");
+                        TextField elCampo = new TextField(fieldDeclaration.getKey() + " va aquí");
+                        elCampo.setTooltip(new Tooltip("Tiene " + fieldDeclaration.getKey()));
+                        elCampo.setId(fieldDeclaration.getKey());
+
                         elCampo.textProperty().addListener(new ChangeListener<String>() {
                             @Override
                             public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
                                 if (newValue != oldValue) {
-                                    if (paraCampos.containsKey(declaredField.getName())) {
-                                        paraCampos.replace(declaredField.getName(), elCampo.getText());
+                                    if (paraCampos.containsKey(fieldDeclaration.getKey())) {
+                                        paraCampos.replace(fieldDeclaration.getKey(), elCampo.getText());
                                     }
                                 }
                             }
                         });
+
                         ////elCampo.setOnKeyTyped((KeyEvent eventito) -> {
                         //                            paraCampos.replace(declaredField.getName(), elCampo.getText() + " ");
                         //                        });
@@ -269,21 +279,21 @@ public class SGFTableView extends Application {
                         //    System.out.println("Es " + conjunto.getKey() + " y tiene " + conjunto.getValue());
                         //
                         //}
-                        //table.getItems().add(empleado);
+                        table.getItems().add(empleado);
                         break;
                     case 1:
-                        Estudiante estudiante = new Estudiante(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), "");
+                        Estudiante estudiante = new Estudiante(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), paraCampos.get("curso"));
                         table.getItems().add(estudiante);
                         System.out.println("Es " + textBoxes.getChildren().filtered(node -> node instanceof TextField).size());
 
                         break;
                     case 2:
-                        PersonalServicio personalServicio = new PersonalServicio(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), 0, 0);
+                        PersonalServicio personalServicio = new PersonalServicio(paraCampos.get("seccion"), att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), Integer.parseInt(paraCampos.get("yearIncorporacion").trim()), Integer.parseInt(paraCampos.get("numeroDespacho").trim()));
                         System.out.println("Es " + textBoxes.getChildren().filtered(node -> node instanceof TextField).size());
                         table.getItems().add(personalServicio);
                         break;
                     case 3:
-                        Profesor profesor = new Profesor(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), 0, 0);
+                        Profesor profesor = new Profesor(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), Integer.parseInt(paraCampos.get("yearIncorporacion").trim()), Integer.parseInt(paraCampos.get("yearIncorporacion").trim()), paraCampos.get("departamento"));
                         System.out.println("Es " + textBoxes.getChildren().filtered(node -> node instanceof TextField).size());
                         table.getItems().add(profesor);
                         break;
