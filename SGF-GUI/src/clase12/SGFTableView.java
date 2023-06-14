@@ -9,26 +9,20 @@ import Entidad.Estudiante;
 import Entidad.Persona;
 import Entidad.PersonalServicio;
 import Entidad.Profesor;
-import java.awt.RenderingHints;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javafx.application.Application;
 import java.util.stream.Collectors;
 import static javafx.application.Application.launch;
-import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -234,9 +228,19 @@ public class SGFTableView extends Application {
                         elCampo.setTooltip(new Tooltip("Tiene " + declaredField.getName()));
                         elCampo.setId(declaredField.getName());
                         paraCampos.put(declaredField.getName(), "");
-                        elCampo.setOnKeyTyped((KeyEvent eventito) -> {
-                            paraCampos.replace(declaredField.getName(), elCampo.getText() + " ");
+                        elCampo.textProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
+                                if (newValue != oldValue) {
+                                    if (paraCampos.containsKey(declaredField.getName())) {
+                                        paraCampos.replace(declaredField.getName(), elCampo.getText());
+                                    }
+                                }
+                            }
                         });
+                        ////elCampo.setOnKeyTyped((KeyEvent eventito) -> {
+                        //                            paraCampos.replace(declaredField.getName(), elCampo.getText() + " ");
+                        //                        });
                         // paraCampos.put(declaredField.getName(), elCampo.getText());
                         System.out.println("Tiene :" + elCampo.getId());
                         estaSeleccion.getChildren().add(elCampo);
@@ -260,12 +264,12 @@ public class SGFTableView extends Application {
                     case 0:
                         Empleado empleado = new Empleado(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), Integer.parseInt(paraCampos.get("yearIncorporacion").trim()), Integer.parseInt(paraCampos.get("numeroDespacho").trim()));
 
-                        for (Map.Entry<String, String> conjunto : paraCampos.entrySet()) {
-
-                            System.out.println("Es " + conjunto.getKey() + " y tiene " + conjunto.getValue());
-
-                        }
-                        table.getItems().add(empleado);
+                        //for (Map.Entry<String, String> conjunto : paraCampos.entrySet()) {
+                        //
+                        //    System.out.println("Es " + conjunto.getKey() + " y tiene " + conjunto.getValue());
+                        //
+                        //}
+                        //table.getItems().add(empleado);
                         break;
                     case 1:
                         Estudiante estudiante = new Estudiante(att1TextField.getText(), att2TextField.getText(), att3TextField.getText(), att4TextField.getText(), "");
